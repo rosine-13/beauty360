@@ -1,0 +1,20 @@
+# Secrets : ne JAMAIS envoyer
+.env
+
+# Fichiers automatiques de Python
+__pycache__/
+*.pyc
+venv/
+.venv/
+
+# Base de données locale (Render utilisera Postgres)
+*.db
+
+# Copies automatiques de Jupyter
+.ipynb_checkpoints/
+
+# Images d'entraînement : trop lourdes
+data/images/
+
+# Ancien modèle (l'API utilise le .tflite)
+models/skin_model.keras

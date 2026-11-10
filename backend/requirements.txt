@@ -1,0 +1,25 @@
+# Les outils que Render doit installer pour faire tourner l'API Beauty360
+
+# Le serveur web
+fastapi
+uvicorn[standard]
+python-multipart        # pour recevoir les photos (UploadFile)
+
+# La base de données
+sqlalchemy
+psycopg2-binary         # le "traducteur" entre Python et PostgreSQL
+
+# La sécurité
+bcrypt                  # chiffrer les mots de passe
+pyjwt                   # créer et vérifier les tokens
+email-validator         # vérifier les emails (EmailStr)
+
+# Le modèle et les images
+ai-edge-litert          # le petit moteur qui fait tourner le modèle TFLite
+numpy
+pillow                  # ouvrir et redimensionner les photos
+
+# Le catalogue et l'agent IA
+pandas                  # lire catalogue_final.csv
+openai                  # parler à DeepSeek
+python-dotenv           # lire le fichier .env (sur ton PC)
