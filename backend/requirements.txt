@@ -7,7 +7,7 @@ python-multipart        # pour recevoir les photos (UploadFile)
 
 # La base de données
 sqlalchemy
-psycopg2-binary         # le "traducteur" entre Python et PostgreSQL
+psycopg[binary]         # le "traducteur" entre Python et PostgreSQL (version 3)         # le "traducteur" entre Python et PostgreSQL
 
 # La sécurité
 bcrypt                  # chiffrer les mots de passe
