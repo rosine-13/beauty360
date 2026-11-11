@@ -17,6 +17,8 @@ df["prix_barre_fcfa"] = df["prix_barre_fcfa"].fillna(0).astype(int)
 # "acne|pores" -> ["acne", "pores"] : plus simple à filtrer
 df["liste_problemes"] = df["problemes"].str.split("|")
 df["liste_types"] = df["types_peau"].str.split("|")
+# Actifs annoncés dans le NOM du produit (vide si le nom n'en cite aucun)
+df["liste_actifs"] = df["actifs"].fillna("").apply(lambda a: [x for x in a.split("|") if x])
 
 # Ordre d'une routine simple : nettoyer -> traiter -> hydrater -> protéger
 ETAPES = ["Nettoyant", "Soin ciblé", "Hydratant", "Protection solaire"]
@@ -35,6 +37,7 @@ def en_json(r) -> dict:
         "prix_barre_fcfa": int(r.prix_barre_fcfa) or None,   # ancien prix si promo
         "problemes": [PROBLEMES[p] for p in r.liste_problemes],
         "types_peau": [TYPES_PEAU[t] for t in r.liste_types],
+        "actifs": r.liste_actifs,
         "texture_legere": bool(r.texture_legere),
         "utilisation": r.utilisation,
         "vendeur": r.vendeur,

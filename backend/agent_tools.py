@@ -55,9 +55,12 @@ def fiche_produit(nom: str) -> dict:
     if trouves.empty:
         return {"trouve": False, "message": "Produit introuvable dans le catalogue."}
     p = en_json(next(trouves.itertuples()))
-    return {"trouve": True, **{k: p[k] for k in ("nom", "marque", "categorie", "prix_fcfa", "problemes",
-                                                 "types_peau", "texture_legere", "utilisation",
-                                                 "vendeur", "date_releve")}}
+    fiche = {k: p[k] for k in ("nom", "marque", "categorie", "prix_fcfa", "problemes", "types_peau",
+                               "actifs", "texture_legere", "utilisation", "vendeur", "url_source",
+                               "date_releve")}
+    fiche["note_composition"] = ("Les actifs listés sont ceux annoncés dans le nom du produit. "
+                                 "La composition complète figure sur l'emballage et sur la fiche du vendeur.")
+    return {"trouve": True, **fiche}
 
 
 # ===== LA "NOTICE" DES OUTILS POUR DEEPSEEK =====
@@ -86,7 +89,7 @@ OUTILS = [
             "problemes": _PROBLEMES, "type_peau": _TYPE, "budget_max_fcfa": _BUDGET}}}},
     {"type": "function", "function": {
         "name": "fiche_produit",
-        "description": "Donne la fiche d'un produit précis du catalogue : prix, problèmes ciblés, types de peau, utilisation.",
+        "description": "Donne la fiche d'un produit précis du catalogue : prix, actifs principaux, problèmes ciblés, types de peau, moment d'utilisation, lien vers la fiche du vendeur.",
         "parameters": {"type": "object", "properties": {
             "nom": {"type": "string", "description": "Nom du produit, ou une partie du nom."}},
             "required": ["nom"]}}},
