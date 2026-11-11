@@ -1,6 +1,6 @@
 """
 L'AGENT Beauty360 : la route /agent qui discute avec DeepSeek
-et exécute les outils (dernier_scan, rechercher_produits) quand il les demande.
+et exécute les outils (derniere_analyse, rechercher_produits, proposer_routine, fiche_produit) quand il les demande.
 """
 import json
 import os
@@ -13,7 +13,7 @@ from sqlalchemy.orm import Session
 from database import get_db
 import models
 from security import utilisateur_connecte
-from agent_tools import OUTILS, dernier_scan, rechercher_produits, fiche_produit
+from agent_tools import OUTILS, derniere_analyse, rechercher_produits, proposer_routine, fiche_produit
 
 # ===== 1. CONNEXION À DEEPSEEK (réglages lus dans le fichier .env) =====
 load_dotenv()
@@ -21,18 +21,26 @@ client = OpenAI(api_key=os.getenv("LLM_API_KEY"), base_url=os.getenv("LLM_BASE_U
 MODELE = os.getenv("LLM_MODEL", "deepseek-flash")
 
 # ===== 2. LES CONSIGNES DE L'AGENT (son "rôle") =====
-CONSIGNES = """Tu es l'assistante beauté de l'application Beauty360.
+CONSIGNES = """Tu es l'assistante beauté de l'application Beauty360, pour des femmes et des hommes
+qui vivent en Côte d'Ivoire (Abidjan et le reste du pays).
 Règles :
 - Réponds en français, de façon chaleureuse et concise (5 phrases maximum, sauf si on te demande plus).
 - N'utilise pas de Markdown (pas d'astérisques ni de #). Pour une liste, commence chaque ligne par un tiret.
-- Pour connaître le type de peau de l'utilisatrice, utilise l'outil dernier_scan.
-- Pour conseiller des produits, utilise TOUJOURS l'outil rechercher_produits.
-  Ne cite jamais un produit qui ne vient pas de cet outil. Les prix sont en dollars US.
-- Pour parler d'un produit précis (sa composition, à qui il convient), utilise l'outil fiche_produit.
-  Les ingrédients sont listés du plus concentré au moins concentré. Explique simplement
-  le rôle des ingrédients connus, sans promettre de résultat.
-- Tu ne fais aucun diagnostic médical. En cas d'irritation, de douleur, d'allergie
-  ou de problème persistant, conseille de consulter un dermatologue.
+- Pour connaître les problèmes de peau de l'utilisatrice, utilise l'outil derniere_analyse.
+- Pour conseiller des produits, utilise TOUJOURS rechercher_produits ou proposer_routine.
+  Ne cite jamais un produit qui ne vient pas de ces outils. Les prix sont en FCFA, relevés sur
+  Jumia Côte d'Ivoire : dis que ce sont des prix indicatifs qui peuvent changer.
+- Si l'utilisatrice donne un budget, passe-le dans budget_max_fcfa.
+- Tes conseils tiennent compte du climat ivoirien : chaud et humide toute l'année, soleil fort,
+  et l'harmattan (vent sec, environ de décembre à février) qui assèche la peau.
+  Donc : textures légères et non grasses, écran solaire chaque jour (il aide aussi à éviter
+  que les marques d'acné deviennent des taches brunes), nettoyer la peau après la transpiration.
+  Ne parle jamais d'hiver, de neige ou de froid.
+- Ne recommande jamais de produits éclaircissants ou blanchissants (hydroquinone, corticoïdes,
+  mercure) : ils sont dangereux pour la peau. Si on t'en parle, explique-le avec douceur.
+- Tu ne fais aucun diagnostic médical. L'analyse photo est indicative. En cas d'acné sévère
+  (gros boutons douloureux, cicatrices), d'irritation, d'allergie ou de problème qui dure,
+  conseille de consulter un dermatologue.
 - Si la question n'a rien à voir avec la beauté ou la peau, ramène poliment la conversation au sujet."""
 
 # ===== 3. FORME DES DONNÉES ENVOYÉES PAR FLUTTER =====
@@ -48,12 +56,17 @@ router = APIRouter(prefix="/agent", tags=["Assistant IA"])
 
 # ===== 4. EXÉCUTER UN OUTIL DEMANDÉ PAR DEEPSEEK =====
 def executer_outil(nom: str, arguments: dict, db: Session, user: models.User):
-    if nom == "dernier_scan":
-        return dernier_scan(db, user.id)
-    if nom == "rechercher_produits":
-        return rechercher_produits(**arguments)
-    if nom == "fiche_produit":
-        return fiche_produit(**arguments)
+    try:
+        if nom == "derniere_analyse":
+            return derniere_analyse(db, user.id)
+        if nom == "rechercher_produits":
+            return rechercher_produits(**arguments)
+        if nom == "proposer_routine":
+            return proposer_routine(**arguments)
+        if nom == "fiche_produit":
+            return fiche_produit(**arguments)
+    except TypeError:
+        return {"erreur": "Arguments invalides pour l'outil " + nom}
     return {"erreur": f"Outil inconnu : {nom}"}
 
 

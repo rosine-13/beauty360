@@ -7,14 +7,14 @@ __pycache__/
 venv/
 .venv/
 
-# Base de données locale (Render utilisera Postgres)
+# Base de données locale (Render utilise Postgres)
 *.db
 
 # Copies automatiques de Jupyter
 .ipynb_checkpoints/
 
-# Images d'entraînement : trop lourdes
-data/images/
+# Photos des produits téléchargées automatiquement par l'API
+backend/cache_images/
 
-# Ancien modèle (l'API utilise le .tflite)
-models/skin_model.keras
+# Modèle Keras complet (l'API utilise le .tflite)
+models/*.keras

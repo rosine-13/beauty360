@@ -1,0 +1,126 @@
+{
+  "dataset": "Roboflow Universe - skincare (skincare-gxqjb/skincare-8dmzr) v7, CC BY 4.0",
+  "modele": "EfficientNetB0",
+  "taille_image": 224,
+  "classes": [
+    "Acne",
+    "Blackheads",
+    "Dark-Spots",
+    "Dry-Skin",
+    "Englarged-Pores",
+    "Eyebags",
+    "Oily-Skin",
+    "Skin-Redness",
+    "Whiteheads",
+    "Wrinkles"
+  ],
+  "seuils": {
+    "Acne": 0.4,
+    "Blackheads": 0.55,
+    "Dark-Spots": 0.4,
+    "Dry-Skin": 0.25,
+    "Englarged-Pores": 0.4,
+    "Eyebags": 0.3,
+    "Oily-Skin": 0.5,
+    "Skin-Redness": 0.3,
+    "Whiteheads": 0.25,
+    "Wrinkles": 0.4
+  },
+  "comparaison_valid": [
+    {
+      "modele": "EfficientNetB0",
+      "f1_macro_valid": 0.605,
+      "f1_micro_valid": 0.708,
+      "auc_macro_valid": 0.886,
+      "taille_tflite_mo": 4.6,
+      "ms_par_photo": 87,
+      "duree_entrainement_s": 942
+    },
+    {
+      "modele": "MobileNetV2",
+      "f1_macro_valid": 0.604,
+      "f1_micro_valid": 0.714,
+      "auc_macro_valid": 0.905,
+      "taille_tflite_mo": 2.5,
+      "ms_par_photo": 82,
+      "duree_entrainement_s": 1208
+    }
+  ],
+  "test": {
+    "nb_photos": 358,
+    "f1_micro": 0.68,
+    "f1_macro": 0.552,
+    "par_classe": {
+      "Acne": {
+        "precision": 0.827,
+        "rappel": 0.908,
+        "f1": 0.866,
+        "nb_photos": 174,
+        "auc": 0.927
+      },
+      "Blackheads": {
+        "precision": 0.45,
+        "rappel": 0.429,
+        "f1": 0.439,
+        "nb_photos": 42,
+        "auc": 0.876
+      },
+      "Dark-Spots": {
+        "precision": 0.5,
+        "rappel": 0.125,
+        "f1": 0.2,
+        "nb_photos": 8,
+        "auc": 0.858
+      },
+      "Dry-Skin": {
+        "precision": 0.626,
+        "rappel": 0.817,
+        "f1": 0.709,
+        "nb_photos": 82,
+        "auc": 0.915
+      },
+      "Englarged-Pores": {
+        "precision": 0.402,
+        "rappel": 0.75,
+        "f1": 0.524,
+        "nb_photos": 44,
+        "auc": 0.903
+      },
+      "Eyebags": {
+        "precision": 0.515,
+        "rappel": 0.5,
+        "f1": 0.507,
+        "nb_photos": 34,
+        "auc": 0.884
+      },
+      "Oily-Skin": {
+        "precision": 0.645,
+        "rappel": 0.541,
+        "f1": 0.588,
+        "nb_photos": 37,
+        "auc": 0.941
+      },
+      "Skin-Redness": {
+        "precision": 0.333,
+        "rappel": 0.5,
+        "f1": 0.4,
+        "nb_photos": 8,
+        "auc": 0.941
+      },
+      "Whiteheads": {
+        "precision": 0.553,
+        "rappel": 0.808,
+        "f1": 0.656,
+        "nb_photos": 26,
+        "auc": 0.969
+      },
+      "Wrinkles": {
+        "precision": 0.632,
+        "rappel": 0.632,
+        "f1": 0.632,
+        "nb_photos": 38,
+        "auc": 0.933
+      }
+    }
+  }
+}

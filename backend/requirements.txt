@@ -7,7 +7,7 @@ python-multipart        # pour recevoir les photos (UploadFile)
 
 # La base de données
 sqlalchemy
-psycopg[binary]         # le "traducteur" entre Python et PostgreSQL (version 3)         # le "traducteur" entre Python et PostgreSQL
+psycopg[binary]         # le "traducteur" entre Python et PostgreSQL (version 3)
 
 # La sécurité
 bcrypt                  # chiffrer les mots de passe
@@ -17,9 +17,10 @@ email-validator         # vérifier les emails (EmailStr)
 # Le modèle et les images
 ai-edge-litert          # le petit moteur qui fait tourner le modèle TFLite
 numpy
+opencv-python-headless<5  # détecter un visage avant l'analyse (modèle YuNet)
 pillow                  # ouvrir et redimensionner les photos
 
 # Le catalogue et l'agent IA
-pandas                  # lire catalogue_final.csv
+pandas                  # lire catalogue_ci.csv
 openai                  # parler à DeepSeek
 python-dotenv           # lire le fichier .env (sur ton PC)
